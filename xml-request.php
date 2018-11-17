@@ -1,5 +1,6 @@
 <?php
 // To be included in canada-post-shipping-woocommerce.php
+namespace canada_post_shipping_woocommerce;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -47,7 +48,7 @@ function xml_request($package, $settings, $dev_mode) {
   $quote_type = $settings['commercial_rates'] == 'yes' ? 'commercial' : 'counter';
 
   // Add some extra handling time for the order. It will cause the API to increase its delivery timeframe estimates.
-  $expected_mailing_date = (new DateTime(date('Y-m-d')))->modify('+ ' . $settings['handling_time'] . ' Weekday')->format('Y-m-d');
+  $expected_mailing_date = (new \DateTime(date('Y-m-d')))->modify('+ ' . $settings['handling_time'] . ' Weekday')->format('Y-m-d');
 
   //connect to CP API
   //get rates based on total weight of items plus weight of box, and size of box.

@@ -1,5 +1,6 @@
 <?php
 // To be included in canada-post-shipping-woocommerce.php
+namespace canada_post_shipping_woocommerce;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -24,13 +25,6 @@ function form_fields() {
       'default'     => __("Ship via Canada Post", 'cpswc'),
     ),
 
-    'dev_mode'            => array(
-      'title'       => __('Development Mode', 'cpswc'),
-      'type'        => 'checkbox',
-      'description' => __('Use the Canada Post development sandbox for testing. Turn this off for production.', 'cpwsc'),
-      'default'     => 'yes',
-    ),
-
     'commercial_rates'    => array(
       'title'       => __('Commercial Rates', 'cpswc'),
       'type'        => 'checkbox',
@@ -42,6 +36,13 @@ function form_fields() {
       'title'       => __('API Customer Number', 'cpswc'),
       'type'        => 'text',
       'description' => __('Canada Post API customer number.', 'cpswc'),
+    ),
+
+    'dev_mode'            => array(
+      'title'       => __('Development Mode', 'cpswc'),
+      'type'        => 'checkbox',
+      'description' => __('Use the Canada Post development sandbox for testing. Turn this off for production.', 'cpwsc'),
+      'default'     => 'yes',
     ),
 
     'api_username_dev'    => array(

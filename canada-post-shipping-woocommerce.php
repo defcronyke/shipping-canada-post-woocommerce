@@ -9,6 +9,7 @@
  * WC tested up to: 3.5.0
  * Text Domain: cpswc
  */
+namespace canada_post_shipping_woocommerce;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -32,7 +33,7 @@ function cpswc_init() {
   if (!class_exists('WC_CPSWC_Shipping_Method')) {
 
     // Define the new shipping method class.
-    class WC_CPSWC_Shipping_Method extends WC_Shipping_Method {
+    class WC_CPSWC_Shipping_Method extends \WC_Shipping_Method {
       /**
        * Constructor for the shipping class. Supports shipping zones.
        *
