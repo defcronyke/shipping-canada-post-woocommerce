@@ -54,11 +54,11 @@ function cpswc_init() {
         // The shipping method description.
         $this->method_description = __('Use Canada Post shipping with WooCommerce. Provides some of the premium features from other similar plugins for free.', 'cpswc');
 
-        // Set to 'including' if we want our $this->countries array below to be a whitelist, blacklisting all others implicitly.
-        $this->availablity = 'including';
+        // // Set to 'including' if we want our $this->countries array below to be a whitelist, blacklisting all others implicitly.
+        // $this->availablity = 'including';
 
-        // The list of countries that the shipping method is available for.
-        $this->countries = array('CA');
+        // // The list of countries that the shipping method is available for.
+        // $this->countries = array('CA');
 
         // Features that the shipping method supports.
         $this->supports = array(
@@ -124,6 +124,21 @@ function cpswc_init() {
        * @return void
        */
       public function calculate_shipping($package = array()) {
+        $country     = $package['destination']['country'];
+        $postal_code = $package['destination']['postcode'];
+
+        if (!$country) {
+          return;
+        }
+
+        if ($country == 'CA' && !$postal_code) {
+          return;
+        }
+
+        if ($country == 'US' && !$postal_code) {
+          return;
+        }
+
         // Save the settings so we can use them in a closure later.
         $settings = $this->settings;
 
@@ -144,7 +159,7 @@ function cpswc_init() {
         $password = $dev_mode ? $settings['api_password_dev'] : $settings['api_password'];
 
         // Build the XML request body.
-        $xml_request = xml_request($package, $settings, $dev_mode);
+        $xml_request = xml_request($package, $settings, $country, $postal_code, $dev_mode);
 
         // Make the HTTP request to the API server with curl.
         $curl_response = get_cp_rates($service_url, $xml_request, $username, $password);
@@ -154,8 +169,6 @@ function cpswc_init() {
 
         $box1 = new Box($settings['box_1_inner_dimensions'], $settings['box_1_outer_dimensions'], $settings['box_1_weight']);
         //print_r($box1);
-
-        
       }
     }
   }

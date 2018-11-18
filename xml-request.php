@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Build XML Request body
-function xml_request($package, $settings, $dev_mode) {
+function xml_request($package, $settings, $country, $postal_code, $dev_mode) {
   //get box size based on cart items
   // TODO: Select correct set of boxes from our list of boxes instead of using this hard-coded fake box.
   $box_l      = 30.0;
@@ -41,6 +41,7 @@ function xml_request($package, $settings, $dev_mode) {
 
   // Postal code you are sending to.
   $postal_code = str_replace(' ', '', $package['destination']['postcode']);
+  print_r($postal_code);
 
   // Commercial or counter rates. Select commercial to use your customer number to get discounted rates
   // and more shipping methods. You can mark up the prices later if you don't want to give the customer
@@ -50,6 +51,40 @@ function xml_request($package, $settings, $dev_mode) {
 
   // Add some extra handling time for the order. It will cause the API to increase its delivery timeframe estimates.
   $expected_mailing_date = (new \DateTime(date('Y-m-d')))->modify('+ ' . $settings['handling_time'] . ' Weekday')->format('Y-m-d');
+
+  $destination = '';
+
+  switch ($country) {
+  case 'CA':
+    $destination = <<<XML
+<destination>
+  <domestic>
+    <postal-code>{$postal_code}</postal-code>
+  </domestic>
+</destination>
+XML;
+    break;
+
+  case 'US':
+    $destination = <<<XML
+<destination>
+  <united-states>
+    <zip-code>{$postal_code}</zip-code>
+  </united-states>
+</destination>
+XML;
+    break;
+
+  default:
+    $destination = <<<XML
+<destination>
+  <international>
+    <country-code>{$country}</country-code>
+  </international>
+</destination>
+XML;
+    break;
+  }
 
   //connect to CP API
   //get rates based on total weight of items plus weight of box, and size of box.
@@ -94,11 +129,7 @@ XML;
 		</dimensions>
 	</parcel-characteristics>
 	<origin-postal-code>{$origin_postal_code}</origin-postal-code>
-	<destination>
-		<domestic>
-			<postal-code>{$postal_code}</postal-code>
-		</domestic>
-	</destination>
+	{$destination}
 	<quote-type>{$quote_type}</quote-type>
 	<expected-mailing-date>{$expected_mailing_date}</expected-mailing-date>
 	{$options_tmpl}
