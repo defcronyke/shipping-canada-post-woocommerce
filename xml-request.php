@@ -41,7 +41,6 @@ function xml_request($package, $settings, $country, $postal_code, $dev_mode) {
 
   // Postal code you are sending to.
   $postal_code = str_replace(' ', '', $package['destination']['postcode']);
-  print_r($postal_code);
 
   // Commercial or counter rates. Select commercial to use your customer number to get discounted rates
   // and more shipping methods. You can mark up the prices later if you don't want to give the customer
