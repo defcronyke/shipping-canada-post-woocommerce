@@ -44,7 +44,7 @@ function add_rates($curl_response, $settings, $that) {
             // A label to display what the rate is called.
             'label'    => sprintf(esc_html__('Canada Post %1$s (approx. %2$d business %3$s)', 'cpswc'), $price_quote->{'service-name'}, $transit_time, _n('day', 'days', $transit_time, 'cpswc')),
 
-            // The shipping rate returned by Canada Post with our rate multiplier from the settings applied.
+            // The shipping rate returned by Canada Post with our rate multiplier and markup from the settings applied.
             'cost'     => round((float) $price_quote->{'price-details'}->{'due'} * (float) $settings['rate_multiplier'] + (float) $settings['rate_markup'], 2),
 
             // Calculate tax per_order or per_item.

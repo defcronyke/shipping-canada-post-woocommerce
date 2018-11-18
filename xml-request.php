@@ -7,6 +7,7 @@ if (!defined('ABSPATH')) {
   exit;
 }
 
+// Build XML Request body
 function xml_request($package, $settings, $dev_mode) {
   //get box size based on cart items
   // TODO: Select correct set of boxes from our list of boxes instead of using this hard-coded fake box.

@@ -28,11 +28,11 @@ function cpswc_flat_rate($settings) {
       }
 
       // Get handling fee from settings.
-      $rate = $settings[slug_to_key($term->slug)] * $item['quantity'];
+      $rate = $settings[slug_to_key($term->slug)];
 
       // Add the handling fee if it isn't 0.
       if ((float) $rate != 0.0) {
-        $woocommerce->cart->add_fee(sprintf(__('Shipping %s for %s', 'cpswc'), $term->name, $_product->get_name()), $rate, true, '');
+        $woocommerce->cart->add_fee(sprintf(__('Shipping %s', 'cpswc'), $term->name), $rate, true, '');
       }
     }
   }
