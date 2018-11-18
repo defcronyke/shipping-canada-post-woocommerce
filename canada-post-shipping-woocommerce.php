@@ -26,7 +26,7 @@ require_once 'xml-request.php'; // Defines xml_request() which returns the XML r
 require_once 'get-cp-rates.php'; // Defines get_cp_rates() which requests the shipping rates from the API server.
 require_once 'add-rates.php'; // Defines add_rates() which adds the shipping rates from the API response.
 require_once 'actions-and-filters.php'; // Adds some actions and filters to WooCommerce.
-require_once 'box.php'; // Defines a Box class.
+require_once 'pack-products.php'; // Defines pack_products() which returns an array of boxes.
 
 // Shipping Method init function.
 function cpswc_init() {
@@ -167,8 +167,7 @@ function cpswc_init() {
         // Add the shipping rates that we got from the API response.
         add_rates($curl_response, $settings, $this);
 
-        $box1 = new Box($settings['box_1_inner_dimensions'], $settings['box_1_outer_dimensions'], $settings['box_1_weight']);
-        //print_r($box1);
+        $boxes = pack_products();
       }
     }
   }
