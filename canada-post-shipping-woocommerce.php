@@ -92,6 +92,11 @@ function cpswc_init() {
         // Save settings in admin if you have any defined
         add_action('woocommerce_update_options_shipping_' . $this->id, array($this, 'process_admin_options'));
 
+        // Register the flat shipping rates with WooCommerce.
+        add_action('woocommerce_cart_calculate_fees', function () use ($settings) {
+          cpswc_flat_rate($settings);
+        });
+
         // Register the handling fee with WooCommerce.
         add_action('woocommerce_cart_calculate_fees', function () use ($settings) {
           cpswc_handling_fee($settings);

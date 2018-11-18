@@ -7,6 +7,37 @@ if (!defined('ABSPATH')) {
   exit;
 }
 
+require_once 'utils.php';
+
+function cpswc_flat_rate($settings) {
+  global $woocommerce;
+
+  $cart = $woocommerce->cart->get_cart();
+
+  foreach ($cart as $key => $item) {
+    $_product = $item['data'];
+    $terms    = get_the_terms($_product->get_id(), 'product_shipping_class');
+
+    if (!$terms) {
+      continue;
+    }
+
+    foreach ($terms as $term) {
+      if (!is_flat_rate($term->slug)) {
+        continue;
+      }
+
+      // Get handling fee from settings.
+      $rate = $settings[slug_to_key($term->slug)] * $item['quantity'];
+
+      // Add the handling fee if it isn't 0.
+      if ((float) $rate != 0.0) {
+        $woocommerce->cart->add_fee(sprintf(__('Shipping %s for %s', 'cpswc'), $term->name, $_product->get_name()), $rate, true, '');
+      }
+    }
+  }
+}
+
 function cpswc_handling_fee($settings) {
   global $woocommerce;
 

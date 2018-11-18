@@ -7,10 +7,12 @@ if (!defined('ABSPATH')) {
   exit;
 }
 
+require_once 'utils.php';
+
 // The fields to display on the WooCommerce settings page.
 // This will show in a new tab called "Canada Post Shipping WooCommerce" in the Shipping section.
 function form_fields() {
-  return array(
+  $form_fields = array(
     'title'               => array(
       'title'       => __('Title', 'cpswc'),
       'type'        => 'text',
@@ -117,4 +119,25 @@ function form_fields() {
       'default'     => 'yes',
     ),
   );
+
+  $shipping_classes = WC()->shipping->get_shipping_classes();
+
+  foreach ($shipping_classes as $idx => $shipping_class) {
+    if (!is_flat_rate($shipping_class->slug)) {
+      continue;
+    }
+
+    $new_field_key = slug_to_key($shipping_class->slug);
+
+    $new_field = array(
+      'title'       => sprintf(esc_html__('Cost For Shipping Class: %s', 'cpswc'), $shipping_class->name),
+      'type'        => 'text',
+      'description' => __('This amount will be added as flat rate for each item which uses this shipping class. These items will be excluded from the volume-based shipping calculations. To make your shipping class show up on this settings page, make sure its slug starts with \'flat-rate\'.', 'cpwsc'),
+      'default'     => '0.0',
+    );
+
+    $form_fields[$new_field_key] = $new_field;
+  }
+
+  return $form_fields;
 }
