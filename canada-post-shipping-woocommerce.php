@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: Canada Post Shipping WooCommerce
- * Description: Use Canada Post for shipping with WooCommerce. Aims to provide some of the premium features from other similar plugins for free.
+ * Description: Use Canada Post shipping with WooCommerce. Provides some of the premium features from other similar plugins for free.
  * Version: 1.0.0
  * Author: Jeremy Carter and Daphne Volante
  * Author URI: https://eternalvoid.net
@@ -26,6 +26,7 @@ require_once 'xml-request.php'; // Defines xml_request() which returns the XML r
 require_once 'get-cp-rates.php'; // Defines get_cp_rates() which requests the shipping rates from the API server.
 require_once 'add-rates.php'; // Defines add_rates() which adds the shipping rates from the API response.
 require_once 'actions-and-filters.php'; // Adds some actions and filters to WooCommerce.
+require_once 'box.php'; // Defines a Box class.
 
 // Shipping Method init function.
 function cpswc_init() {
@@ -51,7 +52,7 @@ function cpswc_init() {
         $this->method_title = __('Canada Post Shipping WooCommerce', 'cpswc');
 
         // The shipping method description.
-        $this->method_description = __('Use Canada Post for shipping with WooCommerce. Aims to provide some of the premium features from other similar plugins for free.', 'cpswc');
+        $this->method_description = __('Use Canada Post shipping with WooCommerce. Provides some of the premium features from other similar plugins for free.', 'cpswc');
 
         // Set to 'including' if we want our $this->countries array below to be a whitelist, blacklisting all others implicitly.
         $this->availablity = 'including';
@@ -150,6 +151,11 @@ function cpswc_init() {
 
         // Add the shipping rates that we got from the API response.
         add_rates($curl_response, $settings, $this);
+
+        $box1 = new Box($settings['box_1_inner_dimensions'], $settings['box_1_outer_dimensions'], $settings['box_1_weight']);
+        //print_r($box1);
+
+        
       }
     }
   }
