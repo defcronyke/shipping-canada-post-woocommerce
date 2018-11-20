@@ -9,13 +9,14 @@ if (!defined('ABSPATH')) {
 
 if (!class_exists('Product')) {
   class Product {
-    function __construct($product) {
-      $this->product = $product;
-      $this->data    = $product['data'];
+    function __construct($_product) {
+      $this->product = $_product;
+      $this->data    = $_product['data'];
       $this->length  = $this->data->get_length();
       $this->width   = $this->data->get_width();
       $this->height  = $this->data->get_height();
       $this->weight  = $this->data->get_weight();
+      $this->packed  = false;
     }
 
     function get_volume() {

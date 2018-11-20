@@ -167,7 +167,9 @@ function cpswc_init() {
         // Add the shipping rates that we got from the API response.
         add_rates($curl_response, $settings, $this);
 
-        $boxes = pack_products();
+        $boxes = pack_products($settings);
+        // print_r($boxes);
+        // print_r($boxes[0]->products[0]);
       }
     }
   }
