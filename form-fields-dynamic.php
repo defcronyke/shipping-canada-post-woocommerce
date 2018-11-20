@@ -58,6 +58,7 @@ function form_fields_dynamic($form_fields) {
   
   if (get_taxonomy('pa_stackable')) {
     $terms = get_terms('pa_stackable');
+    //print_r($terms);
     foreach($terms as $term) {
       $new_field_key = slug_to_key($term->slug);
       $new_field     = array(

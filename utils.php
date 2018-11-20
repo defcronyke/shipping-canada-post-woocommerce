@@ -11,6 +11,10 @@ function slug_to_key($slug) {
   return str_replace('-', '_', $slug);
 }
 
+function value_to_key($value) {
+  return str_replace(' ', '_', $value);
+}
+
 function is_flat_rate($slug) {
   $str1 = '-';
   $pos1 = strpos($slug, $str1);
@@ -25,8 +29,10 @@ function is_box($slug) {
   return strtolower(substr($slug, 0, $pos)) == 'box';
 }
 
-function parse_offsets($offsetLWH) {
-  $offsets_array = explode('x', str_replace(' ', '', $offsetLWH));
+function get_offsets($settings, $stack_type) {
+  $stack_type = value_to_key($stack_type);
+  $offsets_str = $settings[$stack_type];
+  $offsets_array = explode('x', str_replace(' ', '', $offsets_str));
   return array(
     (float) $offsets_array[0],
     (float) $offsets_array[1],
