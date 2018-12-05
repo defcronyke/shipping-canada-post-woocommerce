@@ -1,12 +1,13 @@
 <?php
-// To be included in canada-post-shipping-woocommerce.php
-namespace canada_post_shipping_woocommerce;
+// To be included in shipping-canada-post-woocommerce.php
+namespace shipping_canada_post_woocommerce;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
   exit;
 }
 
+// Add the shipping rates from Canada Post to WooCommerce.
 function add_rates($curl_responses, $settings, $that) {
   // Parse the API XML response with SimpleXML.
   libxml_use_internal_errors(true);
@@ -29,27 +30,29 @@ function add_rates($curl_responses, $settings, $that) {
         $price_quotes = $xml->{'price-quotes'}->children('http://www.canadapost.ca/ws/ship/rate-v3');
 
         if ($price_quotes->{'price-quote'}) {
-
           // Iterate over each shipping rate.
           foreach ($price_quotes as $idx => $price_quote) {
             // Get the expected number of business days until arrival,
             // taking into account our handling time from the settings.
             $transit_time = $price_quote->{'service-standard'}->{'expected-transit-time'}+$settings['handling_time'];
-            //if this is the first box
+
+            // If this is the first box.
             $id   = str_replace(' ', '_', $price_quote->{'service-name'});
             $cost = round((float) $price_quote->{'price-details'}->{'due'} * (float) $settings['rate_multiplier'] + (float) $settings['rate_markup'], 2);
             // print_r('id: ' . $id . ' | ');
             // print_r(array_key_exists($id, $total_rates) ? 'true ' : 'false ');
+
             if (!array_key_exists($id, $total_rates)) {
               //print_r('making new shipping rate object | ');
-              //make a new shipping rate object
+
+              // Make a new shipping rate object.
               $rate = array(
                 // Populate our shipping rate object.
                 // A unique ID for the shipping rate.
                 'id'       => $id,
 
                 // A label to display what the rate is called.
-                'label'    => sprintf(esc_html__('Canada Post %1$s (approx. %2$d business %3$s)', 'cpswc'), $price_quote->{'service-name'}, $transit_time, _n('day', 'days', $transit_time, 'cpswc')),
+                'label'    => sprintf(esc_html__('Canada Post %1$s (approx. %2$d business %3$s)', 'scpwc'), $price_quote->{'service-name'}, $transit_time, _n('day', 'days', $transit_time, 'scpwc')),
 
                 // The shipping rate returned by Canada Post with our rate multiplier and markup from the settings applied.
                 'cost'     => $cost,
@@ -64,6 +67,7 @@ function add_rates($curl_responses, $settings, $that) {
               //print_r($total_rates);
             } else {
               //print_r('modifying existing shipping rate | ');
+
               // Modify the existing shipping rates
               $total_rates[$id]['cost'] += $cost;
             }

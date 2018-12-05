@@ -1,6 +1,6 @@
 <?php
-// To be included in canada-post-shipping-woocommerce.php
-namespace canada_post_shipping_woocommerce;
+// To be included in shipping-canada-post-woocommerce.php
+namespace shipping_canada_post_woocommerce;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -10,6 +10,7 @@ if (!defined('ABSPATH')) {
 require_once 'box.php'; // Defines a Box class.
 require_once 'product.php'; // Defines a Product class.
 
+// The volumetric packing algorithm.
 function pack_products($settings) {
   global $woocommerce;
 
@@ -77,14 +78,20 @@ function pack_products($settings) {
           continue;
         }
 
+        if ($_product->flat_rate) {
+          $_product->packed = true;
+          continue;
+        }
+
         // try to add product to box
         // print_r('adding product to box | ');
-        // print_r($_product->data);
         if (!$box->add_product($_product)) {
           // print_r('adding product to box failed | ');
+
           // add product fails and we're at the last box.
           if ($idx >= sizeof($boxes) - 1) {
             // print_r('last box | ');
+
             // there is no box large enough for one or more items.
             if (sizeof($box->products) == 0) {
               // print_r('nothing is in the box ');
@@ -104,7 +111,6 @@ function pack_products($settings) {
             // add the packed box to the packed boxes array
             // print_r('adding packed box to array | ');
             array_push($packed_boxes, $box);
-            //print_r($packed_boxes);
 
             $break2 = true;
             break;
@@ -133,17 +139,10 @@ function pack_products($settings) {
   }
 
   return $packed_boxes;
-
-  //$boxes[0]->add_product($products[0]);
-  print_r($boxes[0]->products);
-
-  //
-
-  // foreach ($products as $_product) {
-  //   print_r($_product->get_volume() . ' ');
-  // }
 }
 
+// Returns true if all items in the cart are packed by our
+// packing algorithm, and false otherwise.
 function all_packed($products) {
   foreach ($products as $_product) {
     if (!$_product->packed) {
@@ -153,8 +152,6 @@ function all_packed($products) {
   }
 
   // print_r('everything is packed ');
-
   return true;
 }
-
 ?>

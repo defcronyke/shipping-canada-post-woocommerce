@@ -1,12 +1,14 @@
 <?php
-// To be included in canada-post-shipping-woocommerce.php
-namespace canada_post_shipping_woocommerce;
+// To be included in shipping-canada-post-woocommerce.php
+namespace shipping_canada_post_woocommerce;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
   exit;
 }
 
+// The ugly curl stuff. This is where the API request to Canada Post is made,
+// to get the shipping rates.
 function get_cp_rates($service_url, $xml_request, $username, $password) {
   $curl = curl_init($service_url);
 
@@ -37,5 +39,4 @@ function get_cp_rates($service_url, $xml_request, $username, $password) {
 
   return $curl_response;
 }
-
 ?>

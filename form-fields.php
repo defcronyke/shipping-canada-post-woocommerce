@@ -1,6 +1,6 @@
 <?php
-// To be included in canada-post-shipping-woocommerce.php
-namespace canada_post_shipping_woocommerce;
+// To be included in shipping-canada-post-woocommerce.php
+namespace shipping_canada_post_woocommerce;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -19,3 +19,4 @@ function form_fields() {
 
   return $form_fields;
 }
+?>

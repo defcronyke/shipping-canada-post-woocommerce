@@ -1,15 +1,21 @@
 <?php
-// To be included in canada-post-shipping-woocommerce.php
-namespace canada_post_shipping_woocommerce;
+// To be included in shipping-canada-post-woocommerce.php
+namespace shipping_canada_post_woocommerce;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
   exit;
 }
 
-require_once 'utils.php';
+require_once 'utils.php'; // Some helper functions.
 
-function cpswc_flat_rate($settings) {
+// Add any applicable flat rate shipping fees to the cart.
+//
+// You can specify these in the dashboard by adding new
+// shipping classes with a slug that starts with "flat-rate-".
+// Once you have some of those, there will be new fields in this
+// plugin's settings area where you can set the rates.
+function scpwc_flat_rate($settings) {
   global $woocommerce;
 
   $cart = $woocommerce->cart->get_cart();
@@ -32,13 +38,15 @@ function cpswc_flat_rate($settings) {
 
       // Add the handling fee if it isn't 0.
       if ((float) $rate != 0.0) {
-        $woocommerce->cart->add_fee(sprintf(__('Shipping %s', 'cpswc'), $term->name), $rate, true, '');
+        $woocommerce->cart->add_fee(sprintf(__('Shipping %s', 'scpwc'), $term->name), $rate, true, '');
       }
     }
   }
 }
 
-function cpswc_handling_fee($settings) {
+// Adds a handling fee to the cart. You can set the fee on the
+// plugin settings page in the dashboard.
+function scpwc_handling_fee($settings) {
   global $woocommerce;
 
   if (is_admin() && !defined('DOING_AJAX')) {
@@ -50,22 +58,21 @@ function cpswc_handling_fee($settings) {
 
   // Add the handling fee if it isn't 0.
   if ((float) $fee != 0.0) {
-    $woocommerce->cart->add_fee(__('Handling', 'cpswc'), $fee, true, '');
+    $woocommerce->cart->add_fee(__('Handling', 'scpwc'), $fee, true, '');
   }
 }
 
 // Register shipping method class with WooCommerce.
-add_action('woocommerce_shipping_init', 'canada_post_shipping_woocommerce\cpswc_init');
+add_action('woocommerce_shipping_init', 'shipping_canada_post_woocommerce\scpwc_init');
 
 // Define the shipping method key and value, like $methods['key'] = 'value'
 // where 'key' is the $this->id that you specify in the constructor,
 // and 'value' is the name of the shipping method class.
-function add_cpswc_shipping_method($methods) {
-  $methods['cpswc'] = 'canada_post_shipping_woocommerce\WC_CPSWC_Shipping_Method';
+function add_scpwc_shipping_method($methods) {
+  $methods['scpwc'] = 'shipping_canada_post_woocommerce\WC_SCPWC_Shipping_Method';
   return $methods;
 }
 
 // Register shipping method with WooCommerce.
-add_filter('woocommerce_shipping_methods', 'canada_post_shipping_woocommerce\add_cpswc_shipping_method');
-
+add_filter('woocommerce_shipping_methods', 'shipping_canada_post_woocommerce\add_scpwc_shipping_method');
 ?>

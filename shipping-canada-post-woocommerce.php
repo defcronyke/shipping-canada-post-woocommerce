@@ -1,15 +1,15 @@
 <?php
 /*
- * Plugin Name: Canada Post Shipping WooCommerce
+ * Plugin Name: Shipping Canada Post WooCommerce
  * Description: Use Canada Post shipping with WooCommerce. Provides some of the premium features from other similar plugins for free.
- * Version: 1.0.0
+ * Version: 0.1.0
  * Author: Jeremy Carter and Daphne Volante
  * Author URI: https://eternalvoid.net
  * WC requires at least: 3.5.0
- * WC tested up to: 3.5.0
- * Text Domain: cpswc
+ * WC tested up to: 3.5.2
+ * Text Domain: scpwc
  */
-namespace canada_post_shipping_woocommerce;
+namespace shipping_canada_post_woocommerce;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
@@ -29,12 +29,12 @@ require_once 'actions-and-filters.php'; // Adds some actions and filters to WooC
 require_once 'pack-products.php'; // Defines pack_products() which returns an array of boxes.
 
 // Shipping Method init function.
-function cpswc_init() {
+function scpwc_init() {
   // Only define class if it isn't defined yet.
   if (!class_exists('WC_CPSWC_Shipping_Method')) {
 
     // Define the new shipping method class.
-    class WC_CPSWC_Shipping_Method extends \WC_Shipping_Method {
+    class WC_SCPWC_Shipping_Method extends \WC_Shipping_Method {
       /**
        * Constructor for the shipping class. Supports shipping zones.
        *
@@ -46,13 +46,13 @@ function cpswc_init() {
         $this->instance_id = absint($instance_id);
 
         // The shipping method ID.
-        $this->id = 'cpswc';
+        $this->id = 'scpwc';
 
         // The shipping method title.
-        $this->method_title = __('Canada Post Shipping WooCommerce', 'cpswc');
+        $this->method_title = __('Shipping Canada Post WooCommerce', 'scpwc');
 
         // The shipping method description.
-        $this->method_description = __('Use Canada Post shipping with WooCommerce. Provides some of the premium features from other similar plugins for free.', 'cpswc');
+        $this->method_description = __('Use Canada Post shipping with WooCommerce. Provides some of the premium features from other similar plugins for free.', 'scpwc');
 
         // // Set to 'including' if we want our $this->countries array below to be a whitelist, blacklisting all others implicitly.
         // $this->availablity = 'including';
@@ -95,12 +95,12 @@ function cpswc_init() {
 
         // Register the flat shipping rates with WooCommerce.
         add_action('woocommerce_cart_calculate_fees', function () use ($settings) {
-          cpswc_flat_rate($settings);
+          scpwc_flat_rate($settings);
         });
 
         // Register the handling fee with WooCommerce.
         add_action('woocommerce_cart_calculate_fees', function () use ($settings) {
-          cpswc_handling_fee($settings);
+          scpwc_handling_fee($settings);
         });
       }
 
@@ -112,7 +112,6 @@ function cpswc_init() {
         $this->form_fields = form_fields();
 
         // Copy the global settings to the shipping zone instance settings area.
-        // TODO: Maybe we should only copy the global settings over if the instance settings don't exist yet.
         $this->instance_form_fields = $this->form_fields;
       }
 
@@ -162,19 +161,44 @@ function cpswc_init() {
         // print_r('number of boxes: ' . sizeof($boxes) . ' | ');
 
         // Build the XML request body.
-        $curl_responses = array();
+        $curl_responses  = array();
+        $num_empty_boxes = 0;
         foreach ($boxes as $box) {
+          // If the box is empty, move on to the next box and don't make a Canada Post API request.
+          if (sizeof($box->products) <= 0) {
+            $num_empty_boxes++;
+            continue;
+          }
+
           $xml_request = xml_request($package, $settings, $country, $postal_code, $dev_mode, $box);
 
           // Make the HTTP request to the API server with curl.
           array_push($curl_responses, get_cp_rates($service_url, $xml_request, $username, $password));
         }
 
-        // Add the shipping rates that we got from the API response.
-        add_rates($curl_responses, $settings, $this);
+        // If all boxes are empty, then all we have are flat rate items.
+        if ($num_empty_boxes >= sizeof($boxes)) {
+          // Make a new shipping rate object.
+          $rate = array(
+            // Populate our shipping rate object.
+            // A unique ID for the shipping rate.
+            'id'       => 'flat_rate',
 
-        // print_r(sizeof($boxes));
-        // print_r($boxes[0]->products[0]);
+            // A label to display what the rate is called.
+            'label'    => esc_html__('Flat rate shipping, see below', 'scpwc'),
+
+            // The shipping rate returned by Canada Post with our rate multiplier and markup from the settings applied.
+            // 'cost'     => false,
+
+            // Calculate tax per_order or per_item.
+            'calc_tax' => 'per_order',
+          );
+
+          $this->add_rate($rate);
+        } else { // If not all boxes are empty.
+          // Add the shipping rates that we got from the API response.
+          add_rates($curl_responses, $settings, $this);
+        }
       }
     }
   }

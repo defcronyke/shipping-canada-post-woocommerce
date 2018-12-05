@@ -1,16 +1,15 @@
 <?php
-// To be included in canada-post-shipping-woocommerce.php
-namespace canada_post_shipping_woocommerce;
+// To be included in shipping-canada-post-woocommerce.php
+namespace shipping_canada_post_woocommerce;
 
 // Exit if accessed directly.
 if (!defined('ABSPATH')) {
   exit;
 }
 
-// Build XML Request body
+// Build the XML Request body.
 function xml_request($_package, $settings, $country, $postal_code, $dev_mode, $box) {
-  //get box size based on cart items
-  // TODO: Select correct set of boxes from our list of boxes instead of using this hard-coded fake box.
+  // Get box size based on cart items.
   $box_l           = $box->outer_l;
   $box_w           = $box->outer_w;
   $box_h           = $box->outer_h;
@@ -22,13 +21,11 @@ function xml_request($_package, $settings, $country, $postal_code, $dev_mode, $b
   // The total weight of the shipment.
   $weight = round($contents_weight + $box_weight, 2);
 
-  //get saved login information
-
-  // API customer number
+  // API customer number.
   $mailed_by = $settings['api_customer_number'];
 
   // Postal code you are sending from.
-  $origin_postal_code = str_replace(' ', '', $settings['origin_postal_code']);
+  $origin_postal_code = strtoupper(str_replace(' ', '', $settings['origin_postal_code']));
 
   // Postal code you are sending to.
   $postal_code = str_replace(' ', '', $_package['destination']['postcode']);
@@ -42,6 +39,7 @@ function xml_request($_package, $settings, $country, $postal_code, $dev_mode, $b
   // Add some extra handling time for the order. It will cause the API to increase its delivery timeframe estimates.
   $expected_mailing_date = (new \DateTime(date('Y-m-d')))->modify('+ ' . $settings['handling_time'] . ' Weekday')->format('Y-m-d');
 
+  // Set the destination.
   $destination = '';
 
   switch ($country) {
@@ -76,21 +74,17 @@ XML;
     break;
   }
 
-  //connect to CP API
-  //get rates based on total weight of items plus weight of box, and size of box.
-  //return rates and day estimates
-
-  // REST URL
-
   // Add the customer number field to the request if we are requesting commercial rates.
   $customer_number_tmpl = $quote_type == 'commercial' ? "<customer-number>$mailed_by</customer-number>" : '';
 
+  // Add whether or not a signature is required.
   $signature_required_tmpl = $settings['signature_required'] == 'no' ? '' : <<<XML
 <option>
 	<option-code>SO</option-code>
 </option>
 XML;
 
+  // Add insurance if desired.
   $buy_insurance_tmpl = $settings['buy_insurance'] == 'no' ? '' : <<<XML
 <option>
 	<option-code>COV</option-code>
@@ -126,5 +120,4 @@ XML;
 </mailing-scenario>
 XML;
 }
-
 ?>
