@@ -12,7 +12,7 @@ function slug_to_key($slug) {
 }
 
 function value_to_key($value) {
-  return str_replace(' ', '_', $value);
+  return strtolower(str_replace(' ', '_', $value));
 }
 
 function is_flat_rate($slug) {
@@ -31,12 +31,13 @@ function is_box($slug) {
 
 function get_offsets($settings, $stack_type) {
   $stack_type = value_to_key($stack_type);
-  $offsets_str = $settings[$stack_type];
+  // print_r($settings);
+  $offsets_str   = $settings[$stack_type];
   $offsets_array = explode('x', str_replace(' ', '', $offsets_str));
   return array(
     (float) $offsets_array[0],
     (float) $offsets_array[1],
-    (float) $offsets_array[2]
+    (float) $offsets_array[2],
   );
 }
 

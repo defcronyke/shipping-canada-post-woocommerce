@@ -8,28 +8,19 @@ if (!defined('ABSPATH')) {
 }
 
 // Build XML Request body
-function xml_request($package, $settings, $country, $postal_code, $dev_mode) {
+function xml_request($_package, $settings, $country, $postal_code, $dev_mode, $box) {
   //get box size based on cart items
   // TODO: Select correct set of boxes from our list of boxes instead of using this hard-coded fake box.
-  $box_l      = 30.0;
-  $box_w      = 20.0;
-  $box_h      = 20.0;
-  $box_weight = 0.01;
-
-  //get weight from $package
-  // TODO: Change this to get the weight of all the contents of each box,
-  // and store the weights for each in an array.
-  $contents_weight = 0.0;
-  $total_price     = 0.0;
-
-  foreach ($package['contents'] as $item) {
-    $contents_weight += $item['data']->get_weight();
-    $total_price += $item['data']->get_price();
-  }
+  $box_l           = $box->outer_l;
+  $box_w           = $box->outer_w;
+  $box_h           = $box->outer_h;
+  $box_weight      = $box->empty_weight;
+  $contents_weight = $box->get_products_weight();
+  //print_r('contents weight: ' . $contents_weight . ' | ');
+  $total_price = $box->get_products_value();
 
   // The total weight of the shipment.
-  // TODO: This may need to be an array if we are shipping multiple boxes.
-  $weight = $contents_weight + $box_weight;
+  $weight = round($contents_weight + $box_weight, 2);
 
   //get saved login information
 
@@ -40,7 +31,7 @@ function xml_request($package, $settings, $country, $postal_code, $dev_mode) {
   $origin_postal_code = str_replace(' ', '', $settings['origin_postal_code']);
 
   // Postal code you are sending to.
-  $postal_code = str_replace(' ', '', $package['destination']['postcode']);
+  $postal_code = str_replace(' ', '', $_package['destination']['postcode']);
 
   // Commercial or counter rates. Select commercial to use your customer number to get discounted rates
   // and more shipping methods. You can mark up the prices later if you don't want to give the customer

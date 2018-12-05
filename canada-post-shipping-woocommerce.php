@@ -158,17 +158,22 @@ function cpswc_init() {
         // API password
         $password = $dev_mode ? $settings['api_password_dev'] : $settings['api_password'];
 
-        // Build the XML request body.
-        $xml_request = xml_request($package, $settings, $country, $postal_code, $dev_mode);
+        $boxes = pack_products($settings);
+        // print_r('number of boxes: ' . sizeof($boxes) . ' | ');
 
-        // Make the HTTP request to the API server with curl.
-        $curl_response = get_cp_rates($service_url, $xml_request, $username, $password);
+        // Build the XML request body.
+        $curl_responses = array();
+        foreach ($boxes as $box) {
+          $xml_request = xml_request($package, $settings, $country, $postal_code, $dev_mode, $box);
+
+          // Make the HTTP request to the API server with curl.
+          array_push($curl_responses, get_cp_rates($service_url, $xml_request, $username, $password));
+        }
 
         // Add the shipping rates that we got from the API response.
-        add_rates($curl_response, $settings, $this);
+        add_rates($curl_responses, $settings, $this);
 
-        $boxes = pack_products($settings);
-        print_r(sizeof($boxes));
+        // print_r(sizeof($boxes));
         // print_r($boxes[0]->products[0]);
       }
     }

@@ -61,27 +61,43 @@ if (!class_exists('Box')) {
       return new Box($box->settings, $box->shipping_class, $box->inner_lwh_str, $box->outer_lwh_str, $box->empty_max_weight_str);
     }
 
+    function get_products_value() {
+      $products_value = 0;
+      foreach ($this->products as $_product) {
+        $products_value += $_product->price;
+      }
+      return $products_value;
+    }
+
     function get_volume() {
       return $this->inner_l * $this->inner_w * $this->inner_h;
     }
 
+    function get_products_weight() {
+      $products_weight = 0;
+      foreach ($this->products as $_product) {
+        $products_weight += $_product->weight;
+      }
+      return $products_weight;
+    }
+
     function get_free_volume() {
-      print_r('getting free volume | ');
+      //print_r('getting free volume | ');
       $products_volume = 0;
       foreach ($this->products as $_product) {
         if ($_product->stacked) {
           $offsets           = get_offsets($this->settings, $_product->get_stack_type());
           $volume_difference = $_product->get_volume_difference($_product->new_stacked_product($offsets));
-          print_r('volume difference: ' . $volume_difference . ' | ');
+          //print_r('volume difference: ' . $volume_difference . ' | ');
           $products_volume += $volume_difference;
         } else {
           $products_volume += $_product->get_volume();
         }
       }
-      print_r('products volume: ' . $products_volume . ' | ');
-      print_r('free volume: ');
-      print_r($this->get_volume() - $products_volume);
-      print_r(' | ');
+      //print_r('products volume: ' . $products_volume . ' | ');
+      //print_r('free volume: ');
+      //print_r($this->get_volume() - $products_volume);
+      //print_r(' | ');
       return $this->get_volume() - $products_volume;
     }
 
@@ -95,7 +111,7 @@ if (!class_exists('Box')) {
     }
 
     function fits_by_size($_product) {
-      print_r('checking fits by size | ');
+      //print_r('checking fits by size | ');
       $product_dimensions = array($_product->length, $_product->width, $_product->height);
 
       //check if product is stackable
@@ -116,7 +132,7 @@ if (!class_exists('Box')) {
           }
         }
       } else {
-        print_r('item not stackable: stack type ' . $stack_type . ' | ');
+        //print_r('item not stackable: stack type ' . $stack_type . ' | ');
       }
 
       usort($product_dimensions, function ($a, $b) {
@@ -146,17 +162,17 @@ if (!class_exists('Box')) {
     }
 
     function fits_by_volume($_product) {
-      print_r('checking fits by volume | ');
+      //print_r('checking fits by volume | ');
       $stack_type = $_product->get_stack_type();
       if ($stack_type) {
         foreach ($this->products as $b_product) {
           $b_stack_type = $b_product->get_stack_type();
           if ($stack_type == $b_stack_type) {
-            print_r('stack type match | ');
+            //print_r('stack type match | ');
             $_product->stacked = true;
             $offsets           = get_offsets($this->settings, $stack_type);
-            print_r('offsets: ');
-            print_r($offsets);
+            //print_r('offsets: ');
+            // print_r($offsets);
             $fits = $this->get_free_volume() > $_product->get_volume_difference($_product->new_stacked_product($offsets));
             if (!$fits) {
               $_product->stacked = false;
@@ -165,7 +181,7 @@ if (!class_exists('Box')) {
           }
         }
       } else {
-        print_r('item not stackable | ');
+        //print_r('item not stackable | ');
       }
       return $this->get_free_volume() > $_product->get_volume();
     }

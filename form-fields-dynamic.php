@@ -40,7 +40,7 @@ function form_fields_dynamic($form_fields) {
       $new_field     = array(
         'title'       => sprintf(esc_html__('Box Outer Dimensions: %s', 'cpswc'), $shipping_class->name),
         'type'        => 'text',
-        'description' => __('cm (L x W x H)', 'cpwsc'),
+        'description' => __('cm (L x W x H) To avoid errors, use dimensions from real boxes. See <a href="https://www.canadapost.ca/tools/pg/manual/PGpscanada-e.asp?fbclid=IwAR0mYrW3dg42lsklOPMcEeKs_v8hHikK9iYM602pYvzaqZSYoNjKOstidXw#1431012">Canada Post website</a> for size guidelines', 'cpwsc'),
         'default'     => '0.0 x 0.0 x 0.0',
       );
       $form_fields[$new_field_key] = $new_field;
@@ -49,7 +49,7 @@ function form_fields_dynamic($form_fields) {
       $new_field     = array(
         'title'       => sprintf(esc_html__('Box Empty And Max Weight: %s', 'cpswc'), $shipping_class->name),
         'type'        => 'text',
-        'description' => __('kg (E -> M)', 'cpwsc'),
+        'description' => __('kg (E -> M) Empty plus max weight must be 30kg or less per box', 'cpwsc'),
         'default'     => '0.0 -> 0.0',
       );
       $form_fields[$new_field_key] = $new_field;

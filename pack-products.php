@@ -18,8 +18,22 @@ function pack_products($settings) {
   $products     = array();
 
   foreach ($products_arr as $key => $_product) {
-    array_push($products, new Product($_product));
+    $n_product = new Product($_product);
+    //print_r('new product quantity' . $n_product->product['quantity'] . ' | ');
+    if ($n_product->product['quantity'] > 1) {
+      //print_r('multi-product | ');
+      foreach ($n_product->get_individual_products() as $i_product) {
+        //print_r('adding individual product to array | ');
+        array_push($products, $i_product);
+      }
+    } else {
+      //print_r('adding single product to array | ');
+      array_push($products, $n_product);
+    }
   }
+
+  //print_r('products : ');
+  //print_r($products);
 
   // Sort the array based on volume.
   usort($products, function ($a, $b) {
@@ -49,37 +63,38 @@ function pack_products($settings) {
 
   $packed_boxes = array();
 
-  while (true) { // TODO: This is looping forever when set to true.
+  while (true) {
     $break3 = false;
 
     foreach ($boxes as $idx => $box) {
       $break2 = false;
       $box    = Box::from_box($box);
+      // print_r(' | trying box: ' . $box->shipping_class->name . ' | ');
 
       foreach ($products as $idx2 => $_product) {
         if ($_product->packed) {
-          print_r('this product was already packed in another box | ');
+          // print_r('this product was already packed in another box | ');
           continue;
         }
 
         // try to add product to box
-        print_r('adding product to box | ');
+        // print_r('adding product to box | ');
         // print_r($_product->data);
         if (!$box->add_product($_product)) {
-          print_r('adding product to box failed | ');
+          // print_r('adding product to box failed | ');
           // add product fails and we're at the last box.
           if ($idx >= sizeof($boxes) - 1) {
-            print_r('last box | ');
+            // print_r('last box | ');
             // there is no box large enough for one or more items.
             if (sizeof($box->products) == 0) {
-              //print_r('nothing is in the box ');
+              // print_r('nothing is in the box ');
               foreach ($packed_boxes as $p_box) {
-                //print_r('unpacking box ');
+                // print_r('unpacking box ');
                 $p_box->unpack();
               }
 
               $packed_boxes = array();
-              print_r('Box packing failed because you have one or more items that are too large for your largest box. Please add a larger box.');
+              print_r(' | Box packing failed because you have one or more items that are too large for your largest box. Please add a larger box. | ');
 
               $break2 = true;
               $break3 = true;
@@ -87,7 +102,7 @@ function pack_products($settings) {
             }
 
             // add the packed box to the packed boxes array
-            print_r('adding packed box to array | ');
+            // print_r('adding packed box to array | ');
             array_push($packed_boxes, $box);
             //print_r($packed_boxes);
 
@@ -102,7 +117,7 @@ function pack_products($settings) {
       }
 
       if (all_packed($products)) {
-        print_r('all items packed, adding packed box to array | ');
+        // print_r('all items packed, adding packed box to array | ');
         array_push($packed_boxes, $box);
 
         return $packed_boxes;
@@ -120,7 +135,7 @@ function pack_products($settings) {
   return $packed_boxes;
 
   //$boxes[0]->add_product($products[0]);
-  //print_r($boxes[0]->products);
+  print_r($boxes[0]->products);
 
   //
 
