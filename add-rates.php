@@ -8,21 +8,22 @@ if (!defined('ABSPATH')) {
 }
 
 // Add the shipping rates from Canada Post to WooCommerce.
-function add_rates($curl_responses, $settings, $that) {
+function add_rates($api_responses, $settings, $that) {
   // Parse the API XML response with SimpleXML.
   libxml_use_internal_errors(true);
 
   $total_rates = array();
-  foreach ($curl_responses as $curl_response) {
-    $xml = simplexml_load_string('<root>' . preg_replace('/<\?xml.*\?>/', '', $curl_response) . '</root>');
+  foreach ($api_responses as $api_response) {
+    $xml = simplexml_load_string('<root>' . preg_replace('/<\?xml.*\?>/', '', $api_response['body']) . '</root>');
 
     // Display error if the XML response is invalid.
     if (!$xml) {
-      echo 'Failed loading XML' . "\n";
-      echo $curl_response . "\n";
+      print_r('Failed loading XML: ');
+      print_r($api_response['body']);
 
       foreach (libxml_get_errors() as $error) {
-        echo "\t" . $error->message;
+        print_r('\t');
+        print_r($error->message);
       }
     } else { // If the XML is valid.
       // Get the price quotes.
@@ -80,8 +81,11 @@ function add_rates($curl_responses, $settings, $that) {
         $messages = $xml->{'messages'}->children('http://www.canadapost.ca/ws/messages');
 
         foreach ($messages as $message) {
-          echo 'Error Code: ' . $message->code . "\n";
-          echo 'Error Msg: ' . $message->description . "\n\n";
+          print_r('Error Code: ');
+          print_r($message->code);
+
+          print_r('Error Msg: ');
+          print_r($message->description);
         }
       }
     }

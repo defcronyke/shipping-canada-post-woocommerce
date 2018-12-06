@@ -161,7 +161,7 @@ function scpwc_init() {
         // print_r('number of boxes: ' . sizeof($boxes) . ' | ');
 
         // Build the XML request body.
-        $curl_responses  = array();
+        $api_responses   = array();
         $num_empty_boxes = 0;
         foreach ($boxes as $box) {
           // If the box is empty, move on to the next box and don't make a Canada Post API request.
@@ -173,7 +173,7 @@ function scpwc_init() {
           $xml_request = xml_request($package, $settings, $country, $postal_code, $dev_mode, $box);
 
           // Make the HTTP request to the API server with curl.
-          array_push($curl_responses, get_cp_rates($service_url, $xml_request, $username, $password));
+          array_push($api_responses, get_cp_rates($service_url, $xml_request, $username, $password));
         }
 
         // If all boxes are empty, then all we have are flat rate items.
@@ -197,7 +197,7 @@ function scpwc_init() {
           $this->add_rate($rate);
         } else { // If not all boxes are empty.
           // Add the shipping rates that we got from the API response.
-          add_rates($curl_responses, $settings, $this);
+          add_rates($api_responses, $settings, $this);
         }
       }
     }
