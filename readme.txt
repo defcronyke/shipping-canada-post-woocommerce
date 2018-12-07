@@ -5,7 +5,7 @@ Tags: woocommerce, shipping, shipping rates, canadapost, canada, post, canada po
 Requires at least: 4.0.1
 Tested up to: 5.0
 Requires PHP: 5.6
-Stable tag: 0.1.4
+Stable tag: 0.1.5
 License: GPLv3 or later License
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -24,12 +24,17 @@ You can set a handling fee.
 
 You can specify that certain items should stack together, saving space in the box and leading to much more accurate estimates.
 
+It shows the customer the estimated number of days it will take for the item to ship, and you can add extra handling time that will increase the estimates if needed.
+
 Gives a more accurate estimate than any other free WooCommerce Canada Post shipping plugin we could find.
 
 == Installation ==
 1. Install and enable through the WordPress dashboard's "Plugins -> Add New" section.
 2. The settings will be available in "WooCommerce -> Settings -> Shipping -> Shipping Canada Post WooCommerce".
 3. Make some shipping zones, and add "Shipping Canada Post WooCommerce" as the shipping method.
+4. Add some boxes and set their dimensions and weight properties on the plugin settings page (see FAQ for instructions).
+5. Read the FAQ for info about more features that are available.
+6. If there are any price calculation issues, try enabling "Debug mode" in "WooCommerce -> Settings -> Shipping -> Shipping options". It will bypass the cache and give a fresh price calculation every time.
 
 == Frequently Asked Questions ==
 = How do I make new boxes? =
@@ -41,10 +46,22 @@ Make a new shipping class with a slug that starts with "flat-rate-". Then assign
 = How do I set certain items as stackable? =
 Make a new global product attribute with the slug "stackable", and add an item to it for each product that can stack. For example, if you have two different sizes of hats that can each stack with their own size, you would make two items, and maybe call them "small hat 1" and "medium hat 1". Next, edit a product, go to "Product data -> Attributes". You should see the attribute name in bold there of the global attribute you made with the slug "stackable". If not, you can add it from the "Custom product attribute" dropdown menu. Next, expand the attribute by clicking on its name in bold. Now simply add one of the values you made to the Value(s) box, and that item will now stack with any other item that has that value. Note that only one stackable value is currently supported per item.
 
+= I am using the Storefront theme, and the shipping estimate section on the checkout page is too narrow. How can I fix that to make it look better? =
+Make a child theme of Storefront (using instructions from the WordPress Codex, or using some plugin), and make sure you switch your active theme to the new child theme. Then add this to the child theme's style.css file:
+```css
+/* Fix Storefront checkout table display. It was too narrow. */
+table.woocommerce-checkout-review-order-table .product-name {
+  width: unset;
+}
+```
+
 == Screenshots ==
 1. The plugin settings page.
 
 == Changelog ==
+= 0.1.5 =
+* Update the installation instructions in readme.txt to make the setup process more clear. Add Storefront css fix to FAQ.
+
 = 0.1.4 =
 * Update the readme.txt file, and fix the default values for box dimensions in the settings.
 
