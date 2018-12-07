@@ -5,24 +5,24 @@ Tags: woocommerce, shipping, shipping rates, canadapost, canada, post, canada po
 Requires at least: 4.0.1
 Tested up to: 5.0
 Requires PHP: 5.6
-Stable tag: 0.1.3
+Stable tag: 0.1.4
 License: GPLv3 or later License
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Use Canada Post shipping with WooCommerce. Provides some of the premium features from other similar plugins for free.
 
 == Description ==
-This is a free WooCommerce plugin which allows you to calculate approximate shipping costs for shipping with Canada Post.
+This is a free WooCommerce plugin which gets very accurate shipping rate estimates for shipping with Canada Post.
 
-It uses an approximated volumetric packing algorithm to figure out how best to pack the products in the shopping cart into user-defined boxes. 
+It uses a volumetric packing algorithm to figure out how to pack the products in the shopping cart into user-defined boxes. 
 
-It supports individual items having flat rates if needed.
+It supports individual items having flat rates.
 
-You can mark up the shipping rates by a percentage and/or a fixed amount.
+You can mark up the shipping rates by a percentage and a fixed amount.
 
 You can set a handling fee.
 
-You can specify that certain items should stack together, saving space in the box.
+You can specify that certain items should stack together, saving space in the box and leading to much more accurate estimates.
 
 Gives a more accurate estimate than any other free WooCommerce Canada Post shipping plugin we could find.
 
@@ -45,6 +45,9 @@ Make a new global product attribute with the slug "stackable", and add an item t
 1. The plugin settings page.
 
 == Changelog ==
+= 0.1.4 =
+* Update the readme.txt file, and fix the default values for box dimensions in the settings.
+
 = 0.1.3 =
 * Update Changelog in the readme.txt file.
 
