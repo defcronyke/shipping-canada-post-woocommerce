@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Shipping Canada Post WooCommerce
  * Description: Use Canada Post shipping with WooCommerce. Provides some of the premium features from other similar plugins for free.
- * Version: 0.1.5
+ * Version: 0.1.6
  * Author: Jeremy Carter and Daphne Volante
  * Author URI: https://eternalvoid.net
  * WC requires at least: 3.5.0

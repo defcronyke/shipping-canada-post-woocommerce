@@ -5,7 +5,7 @@ Tags: woocommerce, shipping, shipping rates, canadapost, canada, post, canada po
 Requires at least: 4.0.1
 Tested up to: 5.0
 Requires PHP: 5.6
-Stable tag: 0.1.5
+Stable tag: 0.1.6
 License: GPLv3 or later License
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -48,7 +48,7 @@ Make a new global product attribute with the slug "stackable", and add an item t
 
 = I am using the Storefront theme, and the shipping estimate section on the checkout page is too narrow. How can I fix that to make it look better? =
 Make a child theme of Storefront (using instructions from the WordPress Codex, or using some plugin), and make sure you switch your active theme to the new child theme. Then add this to the child theme's style.css file:
-```css
+```
 /* Fix Storefront checkout table display. It was too narrow. */
 table.woocommerce-checkout-review-order-table .product-name {
   width: unset;
@@ -59,6 +59,9 @@ table.woocommerce-checkout-review-order-table .product-name {
 1. The plugin settings page.
 
 == Changelog ==
+= 0.1.6 =
+* Update readme.txt because it doesn't support markdown syntax highlighting for code blocks.
+
 = 0.1.5 =
 * Update the installation instructions in readme.txt to make the setup process more clear. Add Storefront css fix to FAQ.
 
