@@ -27,14 +27,14 @@ function form_fields_static() {
     'commercial_rates'    => array(
       'title'       => __('Commercial Rates', 'scpwc'),
       'type'        => 'checkbox',
-      'description' => __('Use your API Customer Number below to get special rates and extra shipping methods. This is recommended if you have a customer number.', 'cpwsc'),
+      'description' => __('Use your Customer Number below to get special rates and extra shipping methods. This is recommended if you have a customer number.', 'cpwsc'),
       'default'     => 'no',
     ),
 
     'api_customer_number' => array(
-      'title'       => __('API Customer Number', 'scpwc'),
+      'title'       => __('Customer Number', 'scpwc'),
       'type'        => 'text',
-      'description' => __('Canada Post API customer number.', 'scpwc'),
+      'description' => __('Canada Post customer number.', 'scpwc'),
     ),
 
     'dev_mode'            => array(
@@ -84,7 +84,7 @@ function form_fields_static() {
     'handling_fee'        => array(
       'title'       => __('Handling Fee', 'scpwc'),
       'type'        => 'text',
-      'description' => __('A fixed dollar amount to add to every shipping quote.', 'cpwsc'),
+      'description' => __('A fixed dollar amount to add to every shipping quote. It will show as a separate item on the invoice.', 'cpwsc'),
       'default'     => '0.0',
     ),
 
@@ -112,7 +112,7 @@ function form_fields_static() {
     'signature_required'  => array(
       'title'       => __('Signature Required', 'scpwc'),
       'type'        => 'checkbox',
-      'description' => __('Require a signature upon delivery. This is mandatory if you buy insurance for your insurance to be valid. You have been warned.', 'cpwsc'),
+      'description' => __('Require a signature upon delivery. This costs extra, but is mandatory if you buy insurance for your insurance to be valid. You have been warned.', 'cpwsc'),
       'default'     => 'yes',
     ),
   );

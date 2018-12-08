@@ -16,9 +16,9 @@ function form_fields_dynamic($form_fields) {
       $new_field_key = slug_to_key($shipping_class->slug);
 
       $new_field = array(
-        'title'       => sprintf(esc_html__('Cost For Shipping Class: %s', 'scpwc'), $shipping_class->name),
+        'title'       => sprintf(esc_html__('Flat Rate Cost: %s', 'scpwc'), $shipping_class->name),
         'type'        => 'text',
-        'description' => __('This amount will be added as flat rate for each item which uses this shipping class. These items will be excluded from the volume-based shipping calculations. To make your shipping class show up on this settings page, make sure its slug starts with \'flat-rate\'.', 'cpwsc'),
+        'description' => __('This amount will be added as a flat rate for each item which uses this shipping class. To make your shipping class show up on this settings page, make sure its slug starts with \'flat-rate-\'.', 'cpwsc'),
         'default'     => '0.0',
       );
 
@@ -32,7 +32,7 @@ function form_fields_dynamic($form_fields) {
       $new_field     = array(
         'title'       => sprintf(esc_html__('Box Inner Dimensions: %s', 'scpwc'), $shipping_class->name),
         'type'        => 'text',
-        'description' => __('cm (L x W x H)', 'cpwsc'),
+        'description' => __('cm (L x W x H) To make a new box that will show up here, make a new shipping class with a slug starting with \'box-\'.', 'cpwsc'),
         'default'     => '0 x 0 x 0',
       );
       $form_fields[$new_field_key] = $new_field;
@@ -41,7 +41,7 @@ function form_fields_dynamic($form_fields) {
       $new_field     = array(
         'title'       => sprintf(esc_html__('Box Outer Dimensions: %s', 'scpwc'), $shipping_class->name),
         'type'        => 'text',
-        'description' => __('cm (L x W x H) To avoid errors, use dimensions from real boxes. See <a href="https://www.canadapost.ca/tools/pg/manual/PGpscanada-e.asp?fbclid=IwAR0mYrW3dg42lsklOPMcEeKs_v8hHikK9iYM602pYvzaqZSYoNjKOstidXw#1431012">Canada Post website</a> for size guidelines', 'cpwsc'),
+        'description' => __('cm (L x W x H) To avoid errors, use dimensions from real boxes. See <a href="https://www.canadapost.ca/tools/pg/manual/PGpscanada-e.asp?fbclid=IwAR0mYrW3dg42lsklOPMcEeKs_v8hHikK9iYM602pYvzaqZSYoNjKOstidXw#1431012">Canada Post website</a> for size guidelines.', 'cpwsc'),
         'default'     => '0 x 0 x 0',
       );
       $form_fields[$new_field_key] = $new_field;
@@ -50,7 +50,7 @@ function form_fields_dynamic($form_fields) {
       $new_field     = array(
         'title'       => sprintf(esc_html__('Box Empty And Max Weight: %s', 'scpwc'), $shipping_class->name),
         'type'        => 'text',
-        'description' => __('kg (E -> M) Empty plus max weight must be 30kg or less per box', 'cpwsc'),
+        'description' => __('kg (E -> M) Empty plus max weight must be 30kg or less per box.', 'cpwsc'),
         'default'     => '0.0 -> 0.0',
       );
       $form_fields[$new_field_key] = $new_field;
@@ -63,9 +63,9 @@ function form_fields_dynamic($form_fields) {
     foreach ($terms as $term) {
       $new_field_key = slug_to_key($term->slug);
       $new_field     = array(
-        'title'       => sprintf(esc_html__('Offset for stackable type: %s', 'scpwc'), $term->name),
+        'title'       => sprintf(esc_html__('Offset For Stackable Type: %s', 'scpwc'), $term->name),
         'type'        => 'text',
-        'description' => __('cm (W x L x H)', 'cpwsc'),
+        'description' => __('cm (W x L x H) See the FAQ in the plugin details for instructions on how to make a product stackable.', 'cpwsc'),
         'default'     => '0.0 x 0.0 x 0.0',
       );
       $form_fields[$new_field_key] = $new_field;

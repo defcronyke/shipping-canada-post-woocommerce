@@ -5,7 +5,7 @@ Tags: woocommerce, shipping, shipping rates, canadapost, canada, post, canada po
 Requires at least: 4.0.1
 Tested up to: 5.0
 Requires PHP: 5.6
-Stable tag: 0.1.6
+Stable tag: 0.1.7
 License: GPLv3 or later License
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -31,10 +31,11 @@ Gives a more accurate estimate than any other free WooCommerce Canada Post shipp
 == Installation ==
 1. Install and enable through the WordPress dashboard's "Plugins -> Add New" section.
 2. The settings will be available in "WooCommerce -> Settings -> Shipping -> Shipping Canada Post WooCommerce".
-3. Make some shipping zones, and add "Shipping Canada Post WooCommerce" as the shipping method.
-4. Add some boxes and set their dimensions and weight properties on the plugin settings page (see FAQ for instructions).
-5. Read the FAQ for info about more features that are available.
-6. If there are any price calculation issues, try enabling "Debug mode" in "WooCommerce -> Settings -> Shipping -> Shipping options". It will bypass the cache and give a fresh price calculation every time.
+3. On the settings page, fill in your Canada Post customer number and API credentials. If you don't have these, you'll have to sign up as a developer on the Canada Post website first.
+4. Make some shipping zones, and add "Shipping Canada Post WooCommerce" as the shipping method.
+5. Add some boxes and set their dimensions and weight properties on the plugin settings page (see FAQ for instructions).
+6. Read the FAQ for info about more features that are available.
+7. If there are any price calculation issues, try enabling "Debug mode" in "WooCommerce -> Settings -> Shipping -> Shipping options". It will bypass the cache and give a fresh price calculation every time.
 
 == Frequently Asked Questions ==
 = How do I make new boxes? =
@@ -56,9 +57,13 @@ table.woocommerce-checkout-review-order-table .product-name {
 ```
 
 == Screenshots ==
-1. The plugin settings page.
+1. The cart page with the Canada Post shipping options, rates, and estimated delivery timeframe.
+2. The plugin settings page.
 
 == Changelog ==
+= 0.1.7 =
+* Improve descriptions on settings page. Update readme.txt installation instructions.
+
 = 0.1.6 =
 * Update readme.txt because it doesn't support markdown syntax highlighting for code blocks.
 
