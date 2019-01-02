@@ -172,6 +172,13 @@ if (!class_exists('Box')) {
       });
 
       // Does the product fit in the box by size? We will return this below.
+      //print_r('box dimensions 0: ' . $box_dimensions[0] . ' | ');
+      //print_r('product dimensions 0: ' . $product_dimensions[0] . ' | ');
+      //print_r('box dimensions 1: ' . $box_dimensions[1] . ' | ');
+      //print_r('product dimensions 1: ' . $product_dimensions[1] . ' | ');
+      //print_r('box dimensions 2: ' . $box_dimensions[2] . ' | ');
+      //print_r('product dimensions 2: ' . $product_dimensions[2] . ' | ');
+
       $fits = $box_dimensions[0] > $product_dimensions[0] &&
       $box_dimensions[1] > $product_dimensions[1] &&
       $box_dimensions[2] > $product_dimensions[2];
@@ -249,22 +256,5 @@ if (!class_exists('Box')) {
   }
 }
 
-// Get the list of boxes from the list of shipping classes.
-function get_boxes($settings) {
-  $shipping_classes = get_terms(array('taxonomy' => 'product_shipping_class', 'hide_empty' => false));
-  $boxes            = array();
 
-  foreach ($shipping_classes as $shipping_class) {
-    if (!is_box($shipping_class->slug)) {
-      continue;
-    }
-
-    array_push($boxes, new Box(
-      $settings,
-      $shipping_class
-    ));
-  }
-
-  return $boxes;
-}
 ?>

@@ -1,0 +1,70 @@
+{
+    "standard": {
+        "max size": [24.5, 15.6, 0.5],
+        "max weight" : 50,
+        "light": {
+            "weight": [0, 30],
+            "rates": {
+                "ca": 1.0,
+                "us": 1.2,
+                "intl": 2.5
+            }
+        },
+        "heavy": {
+            "weight": [30, 50],
+            "rates": {
+                "ca": 1.2,
+                "us": 1.8,
+                "intl": 3.6
+            }
+        }
+    },
+    "oversize": {
+        "max size" : [38.0, 27.0, 2.0],
+        "max weight" : 500,
+        "weight1": {
+            "weight": [0, 100],
+            "rates": {
+                "ca": 1.8,
+                "us": 2.95,
+                "intl": 5.9
+            }
+        },
+
+        "weight2": {
+            "weight": [100, 200],
+            "rates": {
+                "ca": 2.95,
+                "us": 5.15,
+                "intl": 10.3
+            }
+        },
+
+        "weight3": {
+            "weight": [200, 300],
+            "rates": {
+                "ca": 4.1,
+                "us": 10.3,
+                "intl": 20.6
+            }
+        },
+
+        "weight4": {
+            "weight": [300, 400],
+            "rates": {
+                "ca": 4.7,
+                "us": 10.3,
+                "intl": 20.6
+            }
+        },
+
+        "weight5": {
+            "weight": [400, 500],
+            "rates": {
+                "ca": 5.05,
+                "us": 10.3,
+                "intl": 20.6
+            }
+        }
+    }
+}

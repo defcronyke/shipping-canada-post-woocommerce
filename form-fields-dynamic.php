@@ -55,6 +55,37 @@ function form_fields_dynamic($form_fields) {
       );
       $form_fields[$new_field_key] = $new_field;
     }
+
+    if (is_letter($shipping_class->slug)) {
+      $slug_key = slug_to_key($shipping_class->slug);
+
+      $new_field_key = $slug_key . '_inner_dimensions';
+      $new_field     = array(
+        'title'       => sprintf(esc_html__('Envelope Inner Dimensions: %s', 'scpwc'), $shipping_class->name),
+        'type'        => 'text',
+        'description' => __('cm (L x W x H) To make a new letter envelope that will show up here, make a new shipping class with a slug starting with \'letter-\'.', 'cpwsc'),
+        'default'     => '0 x 0 x 0',
+      );
+      $form_fields[$new_field_key] = $new_field;
+
+      $new_field_key = $slug_key . '_outer_dimensions';
+      $new_field     = array(
+        'title'       => sprintf(esc_html__('Envelope Outer Dimensions: %s', 'scpwc'), $shipping_class->name),
+        'type'        => 'text',
+        'description' => __('cm (L x W x H) Maximum sizes for standard letter mail are: L - 24.5cm, W - 15.6cm, H - 0.5cm. Maximum sizes for oversize letter mail are: L - 38cm, W - 27cm, H - 2cm', 'cpwsc'),
+        'default'     => '0 x 0 x 0',
+      );
+      $form_fields[$new_field_key] = $new_field;
+
+      $new_field_key = $slug_key . '_weight';
+      $new_field     = array(
+        'title'       => sprintf(esc_html__('Envelope Empty And Max Weight: %s', 'scpwc'), $shipping_class->name),
+        'type'        => 'text',
+        'description' => __('kg (E -> M) Empty plus max weight must be 50g or less for standard letter mail and 500g or less for oversize letter mail.', 'cpwsc'),
+        'default'     => '0.0 -> 0.0',
+      );
+      $form_fields[$new_field_key] = $new_field;
+    }
   }
 
   if (get_taxonomy('pa_stackable')) {

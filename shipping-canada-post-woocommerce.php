@@ -6,7 +6,7 @@
  * Author: Jeremy Carter and Daphne Volante
  * Author URI: https://eternalvoid.net
  * WC requires at least: 3.5.0
- * WC tested up to: 3.5.2
+ * WC tested up to: 3.5.3
  * Text Domain: scpwc
  */
 namespace shipping_canada_post_woocommerce;
@@ -169,11 +169,35 @@ function scpwc_init() {
             $num_empty_boxes++;
             continue;
           }
-
+          
           $xml_request = xml_request($package, $settings, $country, $postal_code, $dev_mode, $box);
 
           // Make the HTTP request to the API server with curl.
           array_push($api_responses, get_cp_rates($service_url, $xml_request, $username, $password));
+
+          // Get Letter Mail rates.
+          if (is_letter($box->shipping_class->slug)) {
+
+            $handling_time = $settings['handling_time'];
+
+            // Make a new shipping rate object.
+            $rate = array(
+              // Populate our shipping rate object.
+              // A unique ID for the shipping rate.
+              'id'        => 'letter_mail',
+
+              // A label to display what the rate is called.
+              'label'     => sprintf(esc_html__('Canada Post Letter Mail (approx. %d - %d business days', 'scpwc'), $handling_time + 2, $handling_time + 7),
+
+              // The shipping rate returned by Canada Post with our rate multiplier and markup from the settings applied.
+              'cost'      => round((float) $box->get_rate($country) * (float) $settings['rate_multiplier'] + (float) $settings['rate_markup'], 2),
+
+              // Calculate tax per_order or per_item.
+              'calc_tax'  => 'per_order'
+            );
+
+            $this->add_rate($rate);
+          }         
         }
 
         // If all boxes are empty, then all we have are flat rate items.

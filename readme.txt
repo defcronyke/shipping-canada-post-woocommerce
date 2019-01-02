@@ -5,18 +5,22 @@ Tags: woocommerce, shipping, shipping rates, canadapost, canada, post, canada po
 Requires at least: 4.0.1
 Tested up to: 5.0
 Requires PHP: 5.6
-Stable tag: 0.1.8
+Stable tag: 0.2.0
 License: GPLv3 or later License
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Use Canada Post shipping with WooCommerce. Provides some of the premium features from other similar plugins for free.
 
 == Description ==
-This is a free WooCommerce plugin which gets very accurate shipping rate estimates for shipping with Canada Post.
+This is a free WooCommerce plugin which gives very accurate shipping rate estimates for shipping with Canada Post.
 
-It uses a volumetric packing algorithm to figure out how to pack the products in the shopping cart into user-defined boxes. 
+Uses a volumetric packing algorithm to figure out how to pack the products in the shopping cart into user-defined boxes and envelopes,
+then it queries the Canada Post API to get real-time rate estimates and adds things together along with some user-defined configurations,
+to adjust the final shipping price charged to the customer.
 
-It supports individual items having flat rates.
+Supports affordable letter mail stamp-based mailing for small and light items.
+
+Supports individual items having flat rates.
 
 You can mark up the shipping rates by a percentage and a fixed amount.
 
@@ -39,8 +43,8 @@ Gives a more accurate estimate than any other free WooCommerce Canada Post shipp
 8. If there are any price calculation issues, try enabling "Debug mode" in "WooCommerce -> Settings -> Shipping -> Shipping options". It will bypass the cache and give a fresh price calculation every time.
 
 == Frequently Asked Questions ==
-= How do I make new boxes? =
-Make a new shipping class with a slug that starts with "box-". Then go to the plugin settings page and there will be a new section to fill in the box's properties.
+= How do I make new boxes and envelopes? =
+Make a new shipping class with a slug that starts with "box-" for boxes, or "letter-" for envelopes. Then go to the plugin settings page and there will be a new section to fill in the box or envelope's properties.
 
 = How do I make certain items have a flat rate shipping cost? =
 Make a new shipping class with a slug that starts with "flat-rate-". Then assign that shipping class to a product. There will now be a new field in the plugin settings page which allows you to set the flat rate for everything with that new shipping class.
@@ -62,6 +66,9 @@ table.woocommerce-checkout-review-order-table .product-name {
 2. The plugin settings page.
 
 == Changelog ==
+= 0.2.0 =
+* Letter mail support added, allowing for much cheaper stamp-based postage if the contents are small and light enough. See the FAQ for instructions.
+
 = 0.1.8 =
 * Improve installation instructions and tags in the readme.txt file.
 

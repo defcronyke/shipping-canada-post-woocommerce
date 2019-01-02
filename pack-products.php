@@ -69,12 +69,17 @@ function pack_products($settings) {
 
     foreach ($boxes as $idx => $box) {
       $break2 = false;
-      $box    = Box::from_box($box);
-      // print_r(' | trying box: ' . $box->shipping_class->name . ' | ');
+      $box;
+      if (is_box($box->shipping_class->slug)) {
+        $box = Box::from_box($box);
+      } else if (is_letter($box->shipping_class->slug)){
+        $box = Letter::from_letter($box);
+      }
+        //print_r(' | trying box: ' . $box->shipping_class->name . ' | ');
 
       foreach ($products as $idx2 => $_product) {
         if ($_product->packed) {
-          // print_r('this product was already packed in another box | ');
+          //print_r('this product was already packed in another box | ');
           continue;
         }
 
@@ -84,13 +89,13 @@ function pack_products($settings) {
         }
 
         // try to add product to box
-        // print_r('adding product to box | ');
+        //print_r('adding product to box | ');
         if (!$box->add_product($_product)) {
           // print_r('adding product to box failed | ');
 
           // add product fails and we're at the last box.
           if ($idx >= sizeof($boxes) - 1) {
-            // print_r('last box | ');
+            //print_r('last box | ');
 
             // there is no box large enough for one or more items.
             if (sizeof($box->products) == 0) {
@@ -109,7 +114,7 @@ function pack_products($settings) {
             }
 
             // add the packed box to the packed boxes array
-            // print_r('adding packed box to array | ');
+            //print_r('adding packed box to array | ');
             array_push($packed_boxes, $box);
 
             $break2 = true;
@@ -123,7 +128,7 @@ function pack_products($settings) {
       }
 
       if (all_packed($products)) {
-        // print_r('all items packed, adding packed box to array | ');
+        //print_r('all items packed, adding packed box to array | ');
         array_push($packed_boxes, $box);
 
         return $packed_boxes;
@@ -146,12 +151,12 @@ function pack_products($settings) {
 function all_packed($products) {
   foreach ($products as $_product) {
     if (!$_product->packed) {
-      // print_r('something isn\'t packed ');
+      //print_r('something isn\'t packed ');
       return false;
     }
   }
 
-  // print_r('everything is packed ');
+  //print_r('everything is packed ');
   return true;
 }
 ?>

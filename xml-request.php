@@ -19,7 +19,7 @@ function xml_request($_package, $settings, $country, $postal_code, $dev_mode, $b
   $total_price = $box->get_products_value();
 
   // The total weight of the shipment.
-  $weight = round($contents_weight + $box_weight, 2);
+  $weight = max(round($contents_weight + $box_weight, 2), 0.01);
 
   // API customer number.
   $mailed_by = $settings['api_customer_number'];
