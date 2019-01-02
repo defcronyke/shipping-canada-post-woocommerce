@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Shipping Canada Post WooCommerce
  * Description: Use Canada Post shipping with WooCommerce. Provides some of the premium features from other similar plugins for free.
- * Version: 0.1.8
+ * Version: 0.2.0
  * Author: Jeremy Carter and Daphne Volante
  * Author URI: https://eternalvoid.net
  * WC requires at least: 3.5.0
@@ -169,7 +169,7 @@ function scpwc_init() {
             $num_empty_boxes++;
             continue;
           }
-          
+
           $xml_request = xml_request($package, $settings, $country, $postal_code, $dev_mode, $box);
 
           // Make the HTTP request to the API server with curl.
@@ -177,27 +177,24 @@ function scpwc_init() {
 
           // Get Letter Mail rates.
           if (is_letter($box->shipping_class->slug)) {
-
-            $handling_time = $settings['handling_time'];
-
             // Make a new shipping rate object.
             $rate = array(
               // Populate our shipping rate object.
               // A unique ID for the shipping rate.
-              'id'        => 'letter_mail',
+              'id'       => 'letter_mail',
 
               // A label to display what the rate is called.
-              'label'     => sprintf(esc_html__('Canada Post Letter Mail (approx. %d - %d business days', 'scpwc'), $handling_time + 2, $handling_time + 7),
+              'label'    => esc_html__('Canada Post Letter Mail (approx. 2 - 7 business days)', 'scpwc'),
 
               // The shipping rate returned by Canada Post with our rate multiplier and markup from the settings applied.
-              'cost'      => round((float) $box->get_rate($country) * (float) $settings['rate_multiplier'] + (float) $settings['rate_markup'], 2),
+              'cost'     => round((float) $box->get_rate($country) * (float) $settings['rate_multiplier'] + (float) $settings['rate_markup'], 2),
 
               // Calculate tax per_order or per_item.
-              'calc_tax'  => 'per_order'
+              'calc_tax' => 'per_order',
             );
 
             $this->add_rate($rate);
-          }         
+          }
         }
 
         // If all boxes are empty, then all we have are flat rate items.
